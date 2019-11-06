@@ -34,6 +34,7 @@ repositories {
 	maven { url = uri("https://kotlin.bintray.com/ktor") }
 }
 
+val accessControlCommonVersion = "1.0.0-SNAPSHOT"
 val arrowVersion = "0.10.0"
 val baseCoreVersion = "2.0.0-SNAPSHOT"
 val baseModuleVersion = "2.0.0-SNAPSHOT"
@@ -46,6 +47,7 @@ val organisationsAndPeopleVersion = "1.0.0-SNAPSHOT"
 
 dependencies {
 	implementation(kotlin("stdlib"))
+	implementation("au.com.touchsafe", "access-control-common", accessControlCommonVersion)
 	implementation("au.com.touchsafe", "organisations-and-people", organisationsAndPeopleVersion)
 	implementation("com.github.evanbennett", "base-core", baseCoreVersion)
 	implementation("com.github.evanbennett", "base-module", baseModuleVersion)
@@ -60,6 +62,7 @@ dependencies {
 
 	runtime("ch.qos.logback", "logback-classic", logbackVersion) // TODO: Work out how to implement logging without any warnings.
 
+	"sql"("au.com.touchsafe", "access-control-common", accessControlCommonVersion, classifier = com.github.evanbennett.gradle.sql.SqlPlugin.SQL_STRING, ext = "zip")
 	"sql"("au.com.touchsafe", "organisations-and-people", organisationsAndPeopleVersion, classifier = com.github.evanbennett.gradle.sql.SqlPlugin.SQL_STRING, ext = "zip")
 	"sql"("com.github.evanbennett", "base-core", baseCoreVersion, classifier = com.github.evanbennett.gradle.sql.SqlPlugin.SQL_STRING, ext = "zip")
 	"sql"("com.github.evanbennett", "base-module", baseModuleVersion, classifier = com.github.evanbennett.gradle.sql.SqlPlugin.SQL_STRING, ext = "zip")
@@ -81,12 +84,17 @@ configure<com.github.evanbennett.gradle.pgmapper.PgmapperPluginExtension> {
 			com.github.evanbennett.gradle.pgmapper.SqlReplacementString("ModuleUser", generatedSqlUser.get()),
 			com.github.evanbennett.gradle.pgmapper.SqlReplacementString("organisations-and-people", databaseName.get()),
 			com.github.evanbennett.gradle.pgmapper.SqlReplacementString("OrganisationsAndPeopleGroup", generatedSqlGroup.get()),
-			com.github.evanbennett.gradle.pgmapper.SqlReplacementString("OrganisationsAndPeopleUser", generatedSqlUser.get())
+			com.github.evanbennett.gradle.pgmapper.SqlReplacementString("OrganisationsAndPeopleUser", generatedSqlUser.get()),
+			com.github.evanbennett.gradle.pgmapper.SqlReplacementString("access-control-common", databaseName.get()),
+			com.github.evanbennett.gradle.pgmapper.SqlReplacementString("AccessControlCommonGroup", generatedSqlGroup.get()),
+			com.github.evanbennett.gradle.pgmapper.SqlReplacementString("AccessControlCommonUser", generatedSqlUser.get()),
+			com.github.evanbennett.gradle.pgmapper.SqlReplacementString(" Configuration ", " ${deploymentSchema.get()} ")
 	))
 	parentSqlPackages.addAll(
 			com.github.evanbennett.gradle.pgmapper.ParentSqlPackage("com.github.evanbennet.core", "_core_system_setup.sql"),
 			com.github.evanbennett.gradle.pgmapper.ParentSqlPackage("com.github.evanbennett.module", "module_"),
-			com.github.evanbennett.gradle.pgmapper.ParentSqlPackage("au.com.touchsafe.organisations-and-people", "}organisations_and_people_")
+			com.github.evanbennett.gradle.pgmapper.ParentSqlPackage("au.com.touchsafe.organisations-and-people", "}organisations_and_people_"),
+			com.github.evanbennett.gradle.pgmapper.ParentSqlPackage("au.com.touchsafe.access-control-common", "}access_control_common_")
 	)
 }
 

@@ -1,3 +1,5 @@
+ACCESS_CONTROL_BOARD = Access Control Board
+ACCESS_CONTROL_BOARD_VERSION_UNIQUE_IDENTIFIER = Access Control Board Unique Identifier
 ALCO_MEASURE_RESULT = AlcoMeasure Result
 ALCO_MEASURE_RESULTS = AlcoMeasure Results
 PHOTO_1_FILE = Photo 1

@@ -7,5 +7,6 @@ CREATE VIEW AlcoholTestResults AS --VIEW_NAME_SINGULAR:AlcoholTestResult
 -- TODO: Add To & From Dates conditions
 -- TODO: Add `passed` condition
 -- TODO: Add Person Category conditions (these will be added as column/s to CSV export)
+-- TODO: Implement a view mode that displays the photos!!!
 
 COMMIT;
