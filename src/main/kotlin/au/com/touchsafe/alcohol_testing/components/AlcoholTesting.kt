@@ -8,6 +8,7 @@ object AlcoholTesting : au.com.touchsafe.alcohol_testing.components.managed.Alco
 	}
 
 	override fun menu(): com.github.evanbennett.core.ui.Menu {
+		val accessControlBoardsController: au.com.touchsafe.access_control_common.controllers.generated.AccessControlBoards by com.github.evanbennett.core.ServiceLocator.lazyGet()
 		val alcoholTestResultsController: au.com.touchsafe.alcohol_testing.controllers.generated.AlcoholTestResults by com.github.evanbennett.core.ServiceLocator.lazyGet()
 		val alcoMeasureResultsController: au.com.touchsafe.alcohol_testing.controllers.generated.AlcoMeasureResults by com.github.evanbennett.core.ServiceLocator.lazyGet()
 		val applicationController: com.github.evanbennett.module.controllers.Application by com.github.evanbennett.core.ServiceLocator.lazyGet()
@@ -24,6 +25,7 @@ object AlcoholTesting : au.com.touchsafe.alcohol_testing.components.managed.Alco
 		val usersController: com.github.evanbennett.module.controllers.generated.Users by com.github.evanbennett.core.ServiceLocator.lazyGet()
 		return com.github.evanbennett.core.ui.Menu(listOf(
 				com.github.evanbennett.core.ui.Menu.LeafMenuItem(au.com.touchsafe.alcohol_testing.models.generated.AlcoMeasureResults.ALCO_MEASURE_RESULTS, alcoMeasureResultsController.reverseRoutes.list(), null, null, listOf(au.com.touchsafe.alcohol_testing.PERMISSIONS.ALCO_MEASURE_RESULT.LIST)),
+				com.github.evanbennett.core.ui.Menu.LeafMenuItem(au.com.touchsafe.access_control_common.models.generated.AccessControlBoards.ACCESS_CONTROL_BOARDS, accessControlBoardsController.reverseRoutes.list(), null, null, listOf(au.com.touchsafe.access_control_common.PERMISSIONS.ACCESS_CONTROL_BOARD.LIST)),
 				com.github.evanbennett.core.ui.Menu.LeafMenuItem(au.com.touchsafe.organisations_and_people.models.generated.Organisations.ORGANISATIONS, organisationsController.reverseRoutes.list(), null, null, listOf(au.com.touchsafe.organisations_and_people.PERMISSIONS.ORGANISATION.LIST)),
 				com.github.evanbennett.core.ui.Menu.BranchMenuItem(
 						au.com.touchsafe.organisations_and_people.models.generated.People.PEOPLE,
