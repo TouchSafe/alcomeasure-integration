@@ -18,7 +18,6 @@ open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controll
 	override val auditLogLocation = Messages.ALCO_MEASURE_SERVICE
 	override val reverseRoutes by lazy { ReverseRoutes(this) }
 	protected val accessControlBoardsConnected = java.util.concurrent.ConcurrentHashMap<AccessControlBoardId, io.ktor.websocket.DefaultWebSocketServerSession>()
-	protected val accessControlBoardsOutstandingTests = java.util.concurrent.ConcurrentHashMap<AccessControlBoardId, MutableMap<PersonId, java.time.LocalDateTime>>()
 
 	override fun routes(route: io.ktor.routing.Route) {
 		route {
@@ -36,11 +35,7 @@ open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controll
 			call.logError("AlcoMeasureService.requestAlcoMeasureTest", "AlcoMeasure is not connected: [${accessControlBoardId}] [${personId}]")
 			call.sendEmail("TODO", "TouchSafe Notification - AlcoMeasure Offline", "TODO") // TODO
 		} else {
-			val accessControlBoardOutstandingTests = accessControlBoardsOutstandingTests[accessControlBoardId]!!
-			if (!accessControlBoardOutstandingTests.keys.contains(personId)) {
-				accessControlBoardOutstandingTests += personId to java.time.LocalDateTime.now()
 				session.outgoing.send(io.ktor.http.cio.websocket.Frame.Text("$TEST_START$personId;$firstName;$surname"))
-			}
 		}
 	}
 
@@ -86,7 +81,6 @@ open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controll
 		val accessControlBoard = accessControlBoardFactory.loadWithUniqueUniqueIdentifier(accessControlBoardFactory.COLUMNS.UNIQUE_IDENTIFIER.field(uniqueIdentifier), call) ?: throw RuntimeException("Access Control Board not found with `uniqueIdentifier`: [$uniqueIdentifierString]")
 		val accessControlBoardId = accessControlBoard.accessControlBoardId.value!!.integer
 		accessControlBoardsConnected[accessControlBoardId] = session
-		if (accessControlBoardsOutstandingTests[accessControlBoardId] == null) accessControlBoardsOutstandingTests[accessControlBoardId] = mutableMapOf<PersonId, java.time.LocalDateTime>()
 		return accessControlBoardId
 	}
 
@@ -116,6 +110,7 @@ open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controll
 
 	companion object {
 
+		// TODO: Duplicated in `au.com.touchsafe.access_control_service.AlcoMeasure`
 		const val FILE_ID_START = "fileId:"
 		const val RESULT_START = "Result;"
 		const val SERIAL_NUMBER_START = "serialNumber:"
