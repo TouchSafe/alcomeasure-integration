@@ -1,5 +1,6 @@
 package au.com.touchsafe.alcohol_testing.controllers
 
+import au.com.touchsafe.access_control_library.AlcoMeasure
 import com.github.evanbennett.module.logError
 import com.github.evanbennett.module.sendEmail
 import io.ktor.application.log
@@ -35,7 +36,7 @@ open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controll
 			call.logError("AlcoMeasureService.requestAlcoMeasureTest", "AlcoMeasure is not connected: [${accessControlBoardId}] [${personId}]")
 			call.sendEmail("TODO", "TouchSafe Notification - AlcoMeasure Offline", "TODO") // TODO
 		} else {
-				session.outgoing.send(io.ktor.http.cio.websocket.Frame.Text("$TEST_START$personId;$firstName;$surname"))
+				session.outgoing.send(io.ktor.http.cio.websocket.Frame.Text("${AlcoMeasure.TEST_START}$personId;$firstName;$surname"))
 		}
 	}
 
@@ -48,11 +49,11 @@ open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controll
 					is io.ktor.http.cio.websocket.Frame.Text -> {
 						val message = frame.readText()
 						when {
-							message.startsWith(UNIQUE_IDENTIFIER_START) -> {
+							message.startsWith(AlcoMeasure.UNIQUE_IDENTIFIER_START) -> {
 								accessControlBoardId = initialiseConnection(message, call, this)
-								outgoing.send(io.ktor.http.cio.websocket.Frame.Text(SERIAL_NUMBER_START + loadSerialNumber(accessControlBoardId, call)))
+								outgoing.send(io.ktor.http.cio.websocket.Frame.Text(AlcoMeasure.SERIAL_NUMBER_START + loadSerialNumber(accessControlBoardId, call)))
 							}
-							message.startsWith(RESULT_START) -> {
+							message.startsWith(AlcoMeasure.RESULT_START) -> {
 								if (accessControlBoardId == null) throw RuntimeException("Trying to store a result without initialising the connection!!!")
 								storeResult(message, accessControlBoardId, call)
 							}
@@ -62,7 +63,7 @@ open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controll
 					is io.ktor.http.cio.websocket.Frame.Binary -> {
 						val fileFactory: com.github.evanbennett.module.models.generated.FileFactory by com.github.evanbennett.core.ServiceLocator.lazyGet()
 						val fileId = fileFactory.insert(frame.data, call).long
-						outgoing.send(io.ktor.http.cio.websocket.Frame.Text(FILE_ID_START + fileId))
+						outgoing.send(io.ktor.http.cio.websocket.Frame.Text(AlcoMeasure.FILE_ID_START + fileId))
 					}
 				}
 			}
@@ -75,7 +76,7 @@ open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controll
 	}
 
 	protected suspend fun initialiseConnection(message: String, call: io.ktor.application.ApplicationCall, session: io.ktor.websocket.DefaultWebSocketServerSession): AccessControlBoardId {
-		val uniqueIdentifierString = message.substring(UNIQUE_IDENTIFIER_START.length)
+		val uniqueIdentifierString = message.substring(AlcoMeasure.UNIQUE_IDENTIFIER_START.length)
 		val accessControlBoardFactory: au.com.touchsafe.access_control_common.models.generated.AccessControlBoardFactory by com.github.evanbennett.core.ServiceLocator.lazyGet()
 		val uniqueIdentifier = accessControlBoardFactory.COLUMNS.UNIQUE_IDENTIFIER.DATA_TYPE_SINGLETON(uniqueIdentifierString)
 		val accessControlBoard = accessControlBoardFactory.loadWithUniqueUniqueIdentifier(accessControlBoardFactory.COLUMNS.UNIQUE_IDENTIFIER.field(uniqueIdentifier), call) ?: throw RuntimeException("Access Control Board not found with `uniqueIdentifier`: [$uniqueIdentifierString]")
@@ -106,16 +107,6 @@ open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controll
 		val tested = alcoMeasureResultFactory.COLUMNS.TESTED.field()
 		val alcoMeasureResult = alcoMeasureResultFactory(alcoMeasureResultId, accessControlBoardId, personId, result, photo1FileId, photo2FileId, photo3FileId, tested).insert(call)
 		return alcoMeasureResult.alcoMeasureResultId.value!!.integer
-	}
-
-	companion object {
-
-		// TODO: Duplicated in `au.com.touchsafe.access_control_service.AlcoMeasure`
-		const val FILE_ID_START = "fileId:"
-		const val RESULT_START = "Result;"
-		const val SERIAL_NUMBER_START = "serialNumber:"
-		const val TEST_START = "Test;"
-		const val UNIQUE_IDENTIFIER_START = "uniqueIdentifier:"
 	}
 
 	@Suppress("unused")

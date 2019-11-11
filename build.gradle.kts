@@ -35,6 +35,7 @@ repositories {
 }
 
 val accessControlCommonVersion = "1.0.0-SNAPSHOT"
+val accessControlLibraryVersion = "1.0.0-SNAPSHOT"
 val arrowVersion = "0.10.0"
 val baseCoreVersion = "2.0.0-SNAPSHOT"
 val baseModuleVersion = "2.0.0-SNAPSHOT"
@@ -48,6 +49,7 @@ val organisationsAndPeopleVersion = "1.0.0-SNAPSHOT"
 dependencies {
 	implementation(kotlin("stdlib"))
 	implementation("au.com.touchsafe", "access-control-common", accessControlCommonVersion)
+	implementation("au.com.touchsafe", "access-control-library", accessControlLibraryVersion)
 	implementation("au.com.touchsafe", "organisations-and-people", organisationsAndPeopleVersion)
 	implementation("com.github.evanbennett", "base-core", baseCoreVersion)
 	implementation("com.github.evanbennett", "base-module", baseModuleVersion)
