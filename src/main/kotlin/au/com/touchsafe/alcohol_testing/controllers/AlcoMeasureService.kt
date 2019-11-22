@@ -3,11 +3,10 @@ package au.com.touchsafe.alcohol_testing.controllers
 import au.com.touchsafe.access_control_library.AlcoMeasure
 import com.github.evanbennett.module.logError
 import com.github.evanbennett.module.sendEmail
-import io.ktor.application.log
 import io.ktor.http.cio.websocket.readText
+import io.ktor.http.cio.websocket.send
 import io.ktor.routing.route
 import io.ktor.websocket.webSocket
-import java.lang.RuntimeException
 
 typealias AccessControlBoardId = Int
 typealias PersonId = Int
@@ -36,7 +35,7 @@ open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controll
 			call.logError("AlcoMeasureService.requestAlcoMeasureTest", "AlcoMeasure is not connected: [${accessControlBoardId}] [${personId}]")
 			call.sendEmail("TODO", "TouchSafe Notification - AlcoMeasure Offline", "TODO") // TODO
 		} else {
-				session.outgoing.send(io.ktor.http.cio.websocket.Frame.Text("${AlcoMeasure.TEST_START}$personId;$firstName;$surname"))
+				session.send("${AlcoMeasure.TEST_START}$personId;$firstName;$surname")
 		}
 	}
 
@@ -49,48 +48,33 @@ open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controll
 					is io.ktor.http.cio.websocket.Frame.Text -> {
 						val message = frame.readText()
 						when {
-							message.startsWith(AlcoMeasure.UNIQUE_IDENTIFIER_START) -> {
-								accessControlBoardId = initialiseConnection(message, call, this)
-								outgoing.send(io.ktor.http.cio.websocket.Frame.Text(AlcoMeasure.SERIAL_NUMBER_START + loadSerialNumber(accessControlBoardId, call)))
+							message.startsWith(au.com.touchsafe.access_control_library.AccessControlBoard.UNIQUE_IDENTIFIER_START) -> {
+								accessControlBoardId = au.com.touchsafe.access_control_library.AccessControlBoard.loadAccessControlBoardId(message, call)
+								accessControlBoardsConnected[accessControlBoardId] = this
+								val accessControlBoardVersion = au.com.touchsafe.access_control_library.AccessControlBoard.loadAccessControlBoardVersion(accessControlBoardId, call)
+								val alcoMeasureSerial = accessControlBoardVersion.alcoMeasureSerial.value?.integer ?: throw RuntimeException("Referable Access Control Board Version found with `accessControlBoardId` but it does not have an `alcoMeasureSerial`: [$accessControlBoardId]")
+								send(AlcoMeasure.SERIAL_NUMBER_START + alcoMeasureSerial)
 							}
 							message.startsWith(AlcoMeasure.RESULT_START) -> {
 								if (accessControlBoardId == null) throw RuntimeException("Trying to store a result without initialising the connection!!!")
 								storeResult(message, accessControlBoardId, call)
 							}
-							else -> call.application.log.error("Unrecognised Text Frame: [${message}]")
+							else -> call.logError("AlcoMeasureService.connect", "Unrecognised Text Frame: [${message}]")
 						}
 					}
 					is io.ktor.http.cio.websocket.Frame.Binary -> {
 						val fileFactory: com.github.evanbennett.module.models.generated.FileFactory by com.github.evanbennett.core.ServiceLocator.lazyGet()
 						val fileId = fileFactory.insert(frame.data, call).long
-						outgoing.send(io.ktor.http.cio.websocket.Frame.Text(AlcoMeasure.FILE_ID_START + fileId))
+						send(AlcoMeasure.FILE_ID_START + fileId)
 					}
 				}
 			}
 		} catch (ex: Throwable) {
-			call.application.log.error("Error occurred: ${closeReason.await()}", ex)
+			call.logError("AlcoMeasureService.connect", "Error occurred: ${closeReason.await()}", ex)
 		}
 
 		// Connection closed:
 		if (accessControlBoardId != null) accessControlBoardsConnected.remove(accessControlBoardId)
-	}
-
-	protected suspend fun initialiseConnection(message: String, call: io.ktor.application.ApplicationCall, session: io.ktor.websocket.DefaultWebSocketServerSession): AccessControlBoardId {
-		val uniqueIdentifierString = message.substring(AlcoMeasure.UNIQUE_IDENTIFIER_START.length)
-		val accessControlBoardFactory: au.com.touchsafe.access_control_common.models.generated.AccessControlBoardFactory by com.github.evanbennett.core.ServiceLocator.lazyGet()
-		val uniqueIdentifier = accessControlBoardFactory.COLUMNS.UNIQUE_IDENTIFIER.DATA_TYPE_SINGLETON(uniqueIdentifierString)
-		val accessControlBoard = accessControlBoardFactory.loadWithUniqueUniqueIdentifier(accessControlBoardFactory.COLUMNS.UNIQUE_IDENTIFIER.field(uniqueIdentifier), call) ?: throw RuntimeException("Access Control Board not found with `uniqueIdentifier`: [$uniqueIdentifierString]")
-		val accessControlBoardId = accessControlBoard.accessControlBoardId.value!!.integer
-		accessControlBoardsConnected[accessControlBoardId] = session
-		return accessControlBoardId
-	}
-
-	protected suspend fun loadSerialNumber(accessControlBoardId: AccessControlBoardId, call: io.ktor.application.ApplicationCall): Int {
-		val accessControlBoardVersionFactory: au.com.touchsafe.access_control_common.models.generated.AccessControlBoardVersionFactory by com.github.evanbennett.core.ServiceLocator.lazyGet()
-		val accessControlBoardIdColumn = accessControlBoardVersionFactory.COLUMNS.ACCESS_CONTROL_BOARD_ID
-		val accessControlBoardVersions = accessControlBoardVersionFactory.loadReferableWithWhereCondition("${accessControlBoardIdColumn.FULL_NAME} = ?", null, listOf(accessControlBoardIdColumn.field(accessControlBoardIdColumn.DATA_TYPE_SINGLETON(accessControlBoardId.toString()))), call)
-		val accessControlBoardVersion = accessControlBoardVersions.singleOrNull() ?: throw RuntimeException("Referable Access Control Board Version not found with `accessControlBoardId`: [$accessControlBoardId]")
-		return accessControlBoardVersion.alcoMeasureSerial.value?.integer ?: throw RuntimeException("Referable Access Control Board Version found with `accessControlBoardId` but it does not have an `alcoMeasureSerial`: [$accessControlBoardId]")
 	}
 
 	protected suspend fun storeResult(message: String, _accessControlBoardId: AccessControlBoardId, call: io.ktor.application.ApplicationCall): Int {
