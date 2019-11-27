@@ -49,9 +49,11 @@ open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controll
 						val message = frame.readText()
 						when {
 							message.startsWith(au.com.touchsafe.access_control_library.AccessControlBoard.UNIQUE_IDENTIFIER_START) -> {
-								accessControlBoardId = au.com.touchsafe.access_control_library.AccessControlBoard.loadAccessControlBoardId(message, call)
+								val accessControlBoardFactory: au.com.touchsafe.access_control_common.models.generated.AccessControlBoardFactory by com.github.evanbennett.core.ServiceLocator.lazyGet()
+								val accessControlBoardFactoryVersion: au.com.touchsafe.access_control_common.models.generated.AccessControlBoardVersionFactory by com.github.evanbennett.core.ServiceLocator.lazyGet()
+								accessControlBoardId = accessControlBoardFactory.loadAccessControlBoardId(message, call)
 								accessControlBoardsConnected[accessControlBoardId] = this
-								val accessControlBoardVersion = au.com.touchsafe.access_control_library.AccessControlBoard.loadAccessControlBoardVersion(accessControlBoardId, call)
+								val accessControlBoardVersion = accessControlBoardFactoryVersion.loadReferable(accessControlBoardId, call)
 								val alcoMeasureSerial = accessControlBoardVersion.alcoMeasureSerial.value?.integer ?: throw RuntimeException("Referable Access Control Board Version found with `accessControlBoardId` but it does not have an `alcoMeasureSerial`: [$accessControlBoardId]")
 								send(AlcoMeasure.SERIAL_NUMBER_START + alcoMeasureSerial)
 							}
