@@ -16,7 +16,7 @@ plugins {
 	`kotlin-dsl`
 	`maven-publish`
 	application
-	id("com.github.johnrengelman.shadow") version "5.1.0"
+	id("com.github.johnrengelman.shadow") version "5.2.0"
 }
 
 group = "au.com.touchsafe"
@@ -36,12 +36,12 @@ repositories {
 
 val accessControlCommonVersion = "1.0.0-SNAPSHOT"
 val accessControlLibraryVersion = "1.0.0-SNAPSHOT"
-val arrowVersion = "0.10.0"
+val arrowVersion = "0.10.4"
 val baseCoreVersion = "2.0.0-SNAPSHOT"
 val baseModuleVersion = "2.0.0-SNAPSHOT"
-val jacksonVersion = "2.9.8"
+val jacksonVersion = "2.10.1"
 val jasyncSqlVersion = "1.0.7"
-val ktorVersion = "1.2.5"
+val ktorVersion = "1.3.0"
 val logbackVersion = "1.2.3"
 val nettyTcnativeVersion = "2.0.26.Final"
 val organisationsAndPeopleVersion = "1.0.0-SNAPSHOT"
@@ -62,7 +62,7 @@ dependencies {
 	implementation("io.netty", "netty-tcnative", nettyTcnativeVersion, classifier = "windows-x86_64")
 	implementation("io.netty", "netty-tcnative-boringssl-static", nettyTcnativeVersion, classifier = "windows-x86_64")
 
-	runtime("ch.qos.logback", "logback-classic", logbackVersion) // TODO: Work out how to implement logging without any warnings.
+	runtimeOnly("ch.qos.logback", "logback-classic", logbackVersion)
 
 	"sql"("au.com.touchsafe", "access-control-common", accessControlCommonVersion, classifier = com.github.evanbennett.gradle.sql.SqlPlugin.SQL_STRING, ext = "zip")
 	"sql"("au.com.touchsafe", "organisations-and-people", organisationsAndPeopleVersion, classifier = com.github.evanbennett.gradle.sql.SqlPlugin.SQL_STRING, ext = "zip")
@@ -70,12 +70,8 @@ dependencies {
 	"sql"("com.github.evanbennett", "base-module", baseModuleVersion, classifier = com.github.evanbennett.gradle.sql.SqlPlugin.SQL_STRING, ext = "zip")
 }
 
-java {
-	sourceCompatibility = JavaVersion.VERSION_11
-	targetCompatibility = JavaVersion.VERSION_11
-}
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-	kotlinOptions.jvmTarget = "1.11"
+	kotlinOptions.jvmTarget = "11"
 }
 
 configure<com.github.evanbennett.gradle.pgmapper.PgmapperPluginExtension> {
@@ -109,6 +105,12 @@ val generateJks = task("generateJks", JavaExec::class) {
 	main = "com.github.evanbennett.module.CertificateGenerator"
 }
 getTasksByName("run", false).first().dependsOn(generateJks)
+
+tasks {
+	shadowJar {
+		isZip64 = true
+	}
+}
 
 /*
 	mappings in Universal ++= Seq(file("conf/generated.keystore") -> "bin/conf/generated.keystore"),

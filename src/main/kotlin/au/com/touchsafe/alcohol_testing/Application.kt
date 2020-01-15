@@ -10,7 +10,7 @@ fun io.ktor.application.Application.main() {
 	au.com.touchsafe.organisations_and_people.components.OrganisationsAndPeople.bindings()
 	au.com.touchsafe.alcohol_testing.components.AlcoholTesting.bindings()
 	install(io.ktor.websocket.WebSockets) {
-		pingPeriod = java.time.Duration.ofSeconds(60)
+		pingPeriodMillis = 60 * 1000
 	}
 	module(au.com.touchsafe.alcohol_testing.components.AlcoholTesting::menu)
 }
