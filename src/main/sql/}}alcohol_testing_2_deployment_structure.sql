@@ -2,7 +2,7 @@ BEGIN READ WRITE;
 
 CREATE TABLE AlcoMeasureResults ( --TABLE_NAME_SINGULAR:AlcoMeasureResult
 	alcoMeasureResultId SERIAL CONSTRAINT AlcoMeasureResultsPrimaryKey PRIMARY KEY,
-	accessControlBoardId INTEGER NOT NULL CONSTRAINT AlcoMeasureResultsRefsAccessControlBoard REFERENCES AccessControlBoards,
+	accessControlBoardId INTEGER NOT NULL CONSTRAINT AlcoMeasureResultsRefsAccessControlBoard REFERENCES AccessControlBoards, -- TODO: Update to AccessPoint???
 	personId INTEGER NOT NULL CONSTRAINT AlcoMeasureResultsRefsPerson REFERENCES People,
 	result DOUBLE PRECISION NOT NULL,
 	photo1FileId FILE CONSTRAINT AlcoMeasureResultsRefsPhoto1 REFERENCES Files, --UNASSIGNABLE
