@@ -13,7 +13,6 @@ apply(plugin = "com.github.evanbennett.sql")
 apply(plugin = "com.github.evanbennett.pgmapper")
 
 plugins {
-	`kotlin-dsl`
 	`maven-publish`
 	application
 	id("com.github.johnrengelman.shadow") version "5.2.0"
