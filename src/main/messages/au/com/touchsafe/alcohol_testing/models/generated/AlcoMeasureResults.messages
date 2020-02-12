@@ -1,3 +1,4 @@
+ACCESS_CONTROLLER = {{au.com.touchsafe.access_control_common.models.generated.AccessControllers-ACCESS_CONTROLLER}}
 PERSON = {{au.com.touchsafe.organisations_and_people.models.generated.People-PERSON}}
 PERSON_VERSION_FIRST_NAME = {{au.com.touchsafe.organisations_and_people.models.generated.Users-PERSON_VERSION_FIRST_NAME}}
 PERSON_VERSION_SURNAME = {{au.com.touchsafe.organisations_and_people.models.generated.Users-PERSON_VERSION_SURNAME}}
