@@ -18,11 +18,8 @@ open class AlcoholTestResultFactory : au.com.touchsafe.alcohol_testing.models.ge
 	override val COLUMNS by lazy { Columns() }
 	override val DEFAULT_LIST_ARGUMENTS by lazy { DisplayListArguments() }
 
-	override fun referenceListArguments(listIdentifier: String, updateUri: com.github.evanbennett.core.HttpAddress?): ReferenceListArguments = ReferenceListArguments(listIdentifier, updateUri)
-
 	open inner class Columns : au.com.touchsafe.alcohol_testing.models.generated.managed.AlcoholTestResultFactory.Columns()
 	open inner class DisplayListArguments : au.com.touchsafe.alcohol_testing.models.generated.managed.AlcoholTestResultFactory.DisplayListArguments()
-	open inner class ReferenceListArguments(listIdentifier: String, updateUri: com.github.evanbennett.core.HttpAddress?) : au.com.touchsafe.alcohol_testing.models.generated.managed.AlcoholTestResultFactory.ReferenceListArguments(listIdentifier, updateUri)
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * DEVELOPER'S ADD CODE BELOW HERE * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 

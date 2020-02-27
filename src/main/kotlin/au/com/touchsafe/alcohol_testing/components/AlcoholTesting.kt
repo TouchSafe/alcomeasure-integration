@@ -12,7 +12,7 @@ object AlcoholTesting : au.com.touchsafe.alcohol_testing.components.managed.Alco
 		val alcoholTestResultsController: au.com.touchsafe.alcohol_testing.controllers.generated.AlcoholTestResults by com.github.evanbennett.core.ServiceLocator.lazyGet()
 		val alcoMeasureResultsController: au.com.touchsafe.alcohol_testing.controllers.generated.AlcoMeasureResults by com.github.evanbennett.core.ServiceLocator.lazyGet()
 		val applicationController: com.github.evanbennett.module.controllers.Application by com.github.evanbennett.core.ServiceLocator.lazyGet()
-		val auditLogsController: com.github.evanbennett.module.controllers.generated.AuditLogs by com.github.evanbennett.core.ServiceLocator.lazyGet()
+		val auditLogController: com.github.evanbennett.module.controllers.generated.AuditLog by com.github.evanbennett.core.ServiceLocator.lazyGet()
 		val countriesController: au.com.touchsafe.organisations_and_people.controllers.generated.Countries by com.github.evanbennett.core.ServiceLocator.lazyGet()
 		val deploymentsController: com.github.evanbennett.module.controllers.generated.Deployments by com.github.evanbennett.core.ServiceLocator.lazyGet()
 		val groupCategoriesController: au.com.touchsafe.organisations_and_people.controllers.generated.GroupCategories by com.github.evanbennett.core.ServiceLocator.lazyGet()
@@ -38,7 +38,7 @@ object AlcoholTesting : au.com.touchsafe.alcohol_testing.components.managed.Alco
 				),
 				com.github.evanbennett.core.ui.Menu.LeafMenuItem(au.com.touchsafe.organisations_and_people.models.generated.Countries.COUNTRIES, countriesController.reverseRoutes.list(), null, null, listOf(au.com.touchsafe.organisations_and_people.PERMISSIONS.COUNTRY.LIST)),
 				com.github.evanbennett.core.ui.Menu.LeafMenuItem(com.github.evanbennett.module.models.generated.Permissions.PERMISSIONS, permissionsController.reverseRoutes.permissionsPanel(), null, null, listOf(com.github.evanbennett.module.PERMISSIONS.PROFILE.LIST, com.github.evanbennett.module.PERMISSIONS.SYSTEM_PROFILE.LIST, com.github.evanbennett.module.PERMISSIONS.PERMISSION.LIST)),
-				com.github.evanbennett.core.ui.Menu.LeafMenuItem(com.github.evanbennett.module.models.generated.AuditLogs.AUDIT_LOGS, auditLogsController.reverseRoutes.list(), null, null, listOf(com.github.evanbennett.module.PERMISSIONS.AUDIT_LOG.LIST)),
+				com.github.evanbennett.core.ui.Menu.LeafMenuItem(com.github.evanbennett.module.models.generated.AuditLog.AUDIT_LOG, auditLogController.reverseRoutes.list(), null, null, listOf(com.github.evanbennett.module.PERMISSIONS.AUDIT_RECORD.LIST)),
 				com.github.evanbennett.core.ui.Menu.LeafMenuItem(com.github.evanbennett.module.models.generated.Deployments.DEPLOYMENT, null, deploymentsController.reverseRoutes.view(), null, listOf(com.github.evanbennett.module.PERMISSIONS.DEPLOYMENT.VIEW)),
 				com.github.evanbennett.core.ui.Menu.BranchMenuItem(
 						au.com.touchsafe.organisations_and_people.models.General.REPORTS,

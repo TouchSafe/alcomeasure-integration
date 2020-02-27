@@ -15,7 +15,6 @@ apply(plugin = "com.github.evanbennett.pgmapper")
 plugins {
 	`maven-publish`
 	application
-	id("com.github.johnrengelman.shadow") version "5.2.0"
 }
 
 group = "au.com.touchsafe"
@@ -104,21 +103,3 @@ val generateJks = task("generateJks", JavaExec::class) {
 	main = "com.github.evanbennett.module.CertificateGenerator"
 }
 getTasksByName("run", false).first().dependsOn(generateJks)
-
-tasks {
-	shadowJar {
-		isZip64 = true
-	}
-}
-
-/*
-	mappings in Universal ++= Seq(file("conf/generated.keystore") -> "bin/conf/generated.keystore"),
-	mappings in Universal ++= ((SqlKeys.dependentSources in Sql).value ++ (unmanagedSources in Sql).value ++ (managedSources in Sql).value).map { originalSqlFile =>
-		val sqlReplacements = PgMapperKeys.sqlReplacements.value
-		var contents = IO.read(originalSqlFile)
-		sqlReplacements.foreach(sqlReplacement => contents = contents.replaceAll(sqlReplacement.source, sqlReplacement.replacement))
-		val tempSqlFile = IO.temporaryDirectory / SQL_STRING / originalSqlFile.getName
-		IO.write(tempSqlFile, contents)
-		tempSqlFile -> (SQL_STRING + "/" + originalSqlFile.getName)
-	}
- */
