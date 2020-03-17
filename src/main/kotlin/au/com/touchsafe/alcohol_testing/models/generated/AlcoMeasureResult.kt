@@ -25,7 +25,6 @@ open class AlcoMeasureResultFactory : au.com.touchsafe.alcohol_testing.models.ge
 
 	override fun referenceListArguments(listIdentifier: String, updateUri: com.github.evanbennett.core.HttpAddress?): ReferenceListArguments = ReferenceListArguments(listIdentifier, updateUri)
 
-	open inner class Columns : au.com.touchsafe.alcohol_testing.models.generated.managed.AlcoMeasureResultFactory.Columns()
 	open inner class Views : au.com.touchsafe.alcohol_testing.models.generated.managed.AlcoMeasureResultFactory.Views()
 	open inner class UniqueConstraints : au.com.touchsafe.alcohol_testing.models.generated.managed.AlcoMeasureResultFactory.UniqueConstraints()
 	open inner class ForeignKeyConstraints : au.com.touchsafe.alcohol_testing.models.generated.managed.AlcoMeasureResultFactory.ForeignKeyConstraints()
@@ -35,6 +34,11 @@ open class AlcoMeasureResultFactory : au.com.touchsafe.alcohol_testing.models.ge
 	open inner class ReferenceListArguments(listIdentifier: String, updateUri: com.github.evanbennett.core.HttpAddress?) : au.com.touchsafe.alcohol_testing.models.generated.managed.AlcoMeasureResultFactory.ReferenceListArguments(listIdentifier, updateUri)
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * DEVELOPER'S ADD CODE BELOW HERE * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+	open inner class Columns : au.com.touchsafe.alcohol_testing.models.generated.managed.AlcoMeasureResultFactory.Columns() {
+
+		override val RESULT = super.RESULT.copy(listWidth = 120)
+	}
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * DEVELOPER'S ADD CODE ABOVE HERE * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 }

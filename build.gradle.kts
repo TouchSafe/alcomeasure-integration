@@ -33,13 +33,12 @@ repositories {
 }
 
 val accessControlCommonVersion = "1.0.0-SNAPSHOT"
-val accessControlLibraryVersion = "1.0.0-SNAPSHOT"
 val arrowVersion = "0.10.4"
 val baseCoreVersion = "2.0.0-SNAPSHOT"
 val baseModuleVersion = "2.0.0-SNAPSHOT"
-val jacksonVersion = "2.10.1"
+val jacksonVersion = "2.10.2"
 val jasyncSqlVersion = "1.0.7"
-val ktorVersion = "1.3.0"
+val ktorVersion = "1.3.2"
 val logbackVersion = "1.2.3"
 val nettyTcnativeVersion = "2.0.26.Final"
 val organisationsAndPeopleVersion = "1.0.0-SNAPSHOT"
@@ -47,12 +46,11 @@ val organisationsAndPeopleVersion = "1.0.0-SNAPSHOT"
 dependencies {
 	implementation(kotlin("stdlib"))
 	implementation("au.com.touchsafe", "access-control-common", accessControlCommonVersion)
-	implementation("au.com.touchsafe", "access-control-library", accessControlLibraryVersion)
 	implementation("au.com.touchsafe", "organisations-and-people", organisationsAndPeopleVersion)
+	implementation("com.fasterxml.jackson.core", "jackson-databind", jacksonVersion)
 	implementation("com.github.evanbennett", "base-core", baseCoreVersion)
 	implementation("com.github.evanbennett", "base-module", baseModuleVersion)
 	implementation("com.github.jasync-sql", "jasync-postgresql", jasyncSqlVersion)
-	implementation("com.fasterxml.jackson.core", "jackson-databind", jacksonVersion)
 	implementation("io.arrow-kt", "arrow-core", arrowVersion)
 	implementation("io.ktor", "ktor-auth", ktorVersion)
 	implementation("io.ktor", "ktor-server-netty", ktorVersion)
@@ -87,7 +85,7 @@ configure<com.github.evanbennett.gradle.pgmapper.PgmapperPluginExtension> {
 			com.github.evanbennett.gradle.pgmapper.SqlReplacementString(" Configuration ", " ${deploymentSchema.get()} ")
 	))
 	parentSqlPackages.addAll(
-			com.github.evanbennett.gradle.pgmapper.ParentSqlPackage("com.github.evanbennet.core", "_core_system_setup.sql"),
+			com.github.evanbennett.gradle.pgmapper.ParentSqlPackage("com.github.evanbennett.core", "_core_system_setup.sql"),
 			com.github.evanbennett.gradle.pgmapper.ParentSqlPackage("com.github.evanbennett.module", "module_"),
 			com.github.evanbennett.gradle.pgmapper.ParentSqlPackage("au.com.touchsafe.organisations-and-people", "}organisations_and_people_"),
 			com.github.evanbennett.gradle.pgmapper.ParentSqlPackage("au.com.touchsafe.access-control-common", "}access_control_common_")

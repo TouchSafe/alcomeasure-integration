@@ -1,8 +1,0 @@
-ALCO_MEASURE_RESULT = {{au.com.touchsafe.alcohol_testing.models.generated.AlcoMeasureResults-ALCO_MEASURE_RESULT}}
-FIRST_NAME = {{au.com.touchsafe.organisations_and_people.models.generated.PersonVersions-FIRST_NAME}}
-ORGANISATION = {{au.com.touchsafe.organisations_and_people.models.generated.Organisations-ORGANISATION}}
-ORGANISATION_VERSION_NAME = {{au.com.touchsafe.organisations_and_people.models.generated.PersonVersions-ORGANISATION_VERSION_NAME}}
-RESULT = {{au.com.touchsafe.alcohol_testing.models.generated.AlcoMeasureResults-RESULT}}
-SURNAME = {{au.com.touchsafe.organisations_and_people.models.generated.PersonVersions-SURNAME}}
-TESTED = {{au.com.touchsafe.alcohol_testing.models.generated.AlcoMeasureResults-TESTED}}
-UNIQUE_IDENTIFIER = {{au.com.touchsafe.organisations_and_people.models.generated.PersonVersions-UNIQUE_IDENTIFIER}}

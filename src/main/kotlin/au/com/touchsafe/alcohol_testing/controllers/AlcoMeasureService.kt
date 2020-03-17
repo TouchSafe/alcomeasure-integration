@@ -1,8 +1,6 @@
 package au.com.touchsafe.alcohol_testing.controllers
 
-import au.com.touchsafe.access_control_library.AlcoMeasure
 import com.github.evanbennett.module.logError
-import com.github.evanbennett.module.sendEmail
 import io.ktor.http.cio.websocket.readText
 import io.ktor.http.cio.websocket.send
 import io.ktor.routing.route
@@ -21,11 +19,9 @@ open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controll
 
 	override fun routes(route: io.ktor.routing.Route) {
 		route {
-			//			TODO: authenticate {
 			route(pathPrefix) {
 				webSocket("connect") { connect() }
 			}
-//			}
 		}
 	}
 
@@ -33,9 +29,8 @@ open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controll
 		val session = accessControllersConnected[accessControllerId]
 		if (session == null) {
 			call.logError("AlcoMeasureService.requestAlcoMeasureTest", "AlcoMeasure is not connected: [${accessControllerId}] [${personId}]")
-			call.sendEmail("TODO", "TouchSafe Notification - AlcoMeasure Offline", "TODO") // TODO
 		} else {
-				session.send("${AlcoMeasure.TEST_START}$personId;$firstName;$surname")
+			session.send("${au.com.touchsafe.access_control_common.AlcoMeasure.TEST_START}$personId;$firstName;$surname")
 		}
 	}
 
@@ -48,16 +43,16 @@ open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controll
 					is io.ktor.http.cio.websocket.Frame.Text -> {
 						val message = frame.readText()
 						when {
-							message.startsWith(au.com.touchsafe.access_control_library.AccessController.UNIQUE_IDENTIFIER_START) -> {
+							message.startsWith(au.com.touchsafe.access_control_common.models.generated.AccessControllerFactory.UNIQUE_IDENTIFIER_START) -> {
 								val accessControllerFactory: au.com.touchsafe.access_control_common.models.generated.AccessControllerFactory by com.github.evanbennett.core.ServiceLocator.lazyGet()
 								val accessControllerFactoryVersion: au.com.touchsafe.access_control_common.models.generated.AccessControllerVersionFactory by com.github.evanbennett.core.ServiceLocator.lazyGet()
 								accessControllerId = accessControllerFactory.loadAccessControllerId(message, call)
 								accessControllersConnected[accessControllerId] = this
 								val accessControllerVersion = accessControllerFactoryVersion.loadReferable(accessControllerId, call)
 								val alcoMeasureSerial = accessControllerVersion.alcoMeasureSerial.value?.integer ?: throw RuntimeException("Referable Access Controller Version found with `accessControllerId` but it does not have an `alcoMeasureSerial`: [$accessControllerId]")
-								send(AlcoMeasure.SERIAL_NUMBER_START + alcoMeasureSerial)
+								send(au.com.touchsafe.access_control_common.AlcoMeasure.SERIAL_NUMBER_START + alcoMeasureSerial)
 							}
-							message.startsWith(AlcoMeasure.RESULT_START) -> {
+							message.startsWith(au.com.touchsafe.access_control_common.AlcoMeasure.RESULT_START) -> {
 								if (accessControllerId == null) throw RuntimeException("Trying to store a result without initialising the connection!!!")
 								storeResult(message, accessControllerId, call)
 							}
@@ -67,7 +62,7 @@ open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controll
 					is io.ktor.http.cio.websocket.Frame.Binary -> {
 						val fileFactory: com.github.evanbennett.module.models.generated.FileFactory by com.github.evanbennett.core.ServiceLocator.lazyGet()
 						val fileId = fileFactory.insert(frame.data, call).long
-						send(AlcoMeasure.FILE_ID_START + fileId)
+						send(au.com.touchsafe.access_control_common.AlcoMeasure.FILE_ID_START + fileId)
 					}
 				}
 			}

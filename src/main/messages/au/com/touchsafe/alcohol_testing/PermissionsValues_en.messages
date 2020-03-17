@@ -1,4 +1,4 @@
 ALCO_MEASURE_RESULT_DESCRIPTION = Allow viewing the AlcoMeasure results.
 ALCO_MEASURE_RESULT_TITLE = AlcoMeasure Results Permission
-ALCOHOL_TEST_RESULTS_DESCRIPTION = Allow viewing the alcohol test results.
-ALCOHOL_TEST_RESULTS_TITLE = Alcohol Test Results Permission
+ALCO_MEASURE_RESULT_REPORT_DESCRIPTION = Allow reporting on the AlcoMeasure test results.
+ALCO_MEASURE_RESULT_REPORT_TITLE = AlcoMeasure Results Report Permission
