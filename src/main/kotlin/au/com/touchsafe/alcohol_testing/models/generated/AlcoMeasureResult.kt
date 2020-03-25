@@ -1,5 +1,7 @@
 package au.com.touchsafe.alcohol_testing.models.generated
 
+import au.com.touchsafe.organisations_and_people.models.generated.managed.PersonVersionFactory
+
 open class AlcoMeasureResult(alcoMeasureResultId: com.github.evanbennett.core.ui.Field<com.github.evanbennett.core.types.numeric.Integer>, accessControllerId: com.github.evanbennett.core.ui.Field<com.github.evanbennett.core.types.numeric.Integer>, personId: com.github.evanbennett.core.ui.Field<com.github.evanbennett.core.types.numeric.Integer>, result: com.github.evanbennett.core.ui.Field<com.github.evanbennett.core.types.numeric.Double>, photo1FileId: com.github.evanbennett.core.ui.Field<com.github.evanbennett.core.types.File>, photo2FileId: com.github.evanbennett.core.ui.Field<com.github.evanbennett.core.types.File>, photo3FileId: com.github.evanbennett.core.ui.Field<com.github.evanbennett.core.types.File>, tested: com.github.evanbennett.core.ui.Field<com.github.evanbennett.core.types.datetime.Timestamp<*>>, override val alcoMeasureResultFactory: AlcoMeasureResultFactory) : au.com.touchsafe.alcohol_testing.models.generated.managed.AlcoMeasureResult(alcoMeasureResultId, accessControllerId, personId, result, photo1FileId, photo2FileId, photo3FileId, tested, alcoMeasureResultFactory) {
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * DEVELOPER'S ADD CODE BELOW HERE * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -37,6 +39,8 @@ open class AlcoMeasureResultFactory : au.com.touchsafe.alcohol_testing.models.ge
 
 	open inner class Columns : au.com.touchsafe.alcohol_testing.models.generated.managed.AlcoMeasureResultFactory.Columns() {
 
+		override val PERSON_VERSION_SURNAME = super.PERSON_VERSION_SURNAME.copy(listWidth = 180)
+		override val PERSON_VERSION_FIRST_NAME = super.PERSON_VERSION_FIRST_NAME.copy(listWidth = 180)
 		override val RESULT = super.RESULT.copy(listWidth = 120)
 	}
 

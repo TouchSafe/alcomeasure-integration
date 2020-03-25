@@ -3,5 +3,6 @@ ORGANISATION = {{au.com.touchsafe.organisations_and_people.models.generated.Orga
 PERSON = {{au.com.touchsafe.organisations_and_people.models.generated.People-PERSON}}
 PERSON_VERSION_FIRST_NAME = {{au.com.touchsafe.organisations_and_people.models.generated.PersonVersions-FIRST_NAME}}
 PERSON_VERSION_SURNAME = {{au.com.touchsafe.organisations_and_people.models.generated.PersonVersions-SURNAME}}
+PERSON_VERSION_UNIQUE_IDENTIFIER = {{au.com.touchsafe.organisations_and_people.models.generated.Users-PERSON_VERSION_UNIQUE_IDENTIFIER}}
 RESULT = {{au.com.touchsafe.alcohol_testing.models.generated.AlcoMeasureResults-RESULT}}
 TESTED = {{au.com.touchsafe.alcohol_testing.models.generated.AlcoMeasureResults-TESTED}}

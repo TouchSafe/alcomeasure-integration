@@ -1,5 +1,7 @@
 package au.com.touchsafe.alcohol_testing.models.generated
 
+import au.com.touchsafe.organisations_and_people.models.generated.managed.PersonVersionFactory
+
 open class AlcoMeasureResultRecord(alcoMeasureResultId: com.github.evanbennett.core.ui.Field<com.github.evanbennett.core.types.numeric.Integer>, uniqueIdentifier: com.github.evanbennett.core.ui.Field<com.github.evanbennett.core.types.string.StringMaxLength012<*>>, personId: com.github.evanbennett.core.ui.Field<com.github.evanbennett.core.types.numeric.Integer>, organisationId: com.github.evanbennett.core.ui.Field<com.github.evanbennett.core.types.numeric.Integer>, tested: com.github.evanbennett.core.ui.Field<com.github.evanbennett.core.types.datetime.Timestamp<*>>, result: com.github.evanbennett.core.ui.Field<com.github.evanbennett.core.types.numeric.Double>, passed: com.github.evanbennett.core.ui.Field<com.github.evanbennett.core.types.Boolean>, override val alcoMeasureResultRecordFactory: AlcoMeasureResultRecordFactory) : au.com.touchsafe.alcohol_testing.models.generated.managed.AlcoMeasureResultRecord(alcoMeasureResultId, uniqueIdentifier, personId, organisationId, tested, result, passed, alcoMeasureResultRecordFactory) {
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * DEVELOPER'S ADD CODE BELOW HERE * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -24,6 +26,7 @@ open class AlcoMeasureResultRecordFactory : au.com.touchsafe.alcohol_testing.mod
 
 		override val UNIQUE_IDENTIFIER = super.UNIQUE_IDENTIFIER.copy(listWidth = 100)
 		override val RESULT = super.RESULT.copy(listWidth = 120)
+		override val PERSON_VERSION_UNIQUE_IDENTIFIER = super.PERSON_VERSION_UNIQUE_IDENTIFIER.copy(listWidth = 150, listVisible = false)
 		override val PERSON_VERSION_SURNAME = super.PERSON_VERSION_SURNAME.copy(listWidth = 180)
 		override val PERSON_VERSION_FIRST_NAME = super.PERSON_VERSION_FIRST_NAME.copy(listWidth = 180)
 		override val ORGANISATION_VERSION_NAME = super.ORGANISATION_VERSION_NAME.copy(listWidth = 180)
