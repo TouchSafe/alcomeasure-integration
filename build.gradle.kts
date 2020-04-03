@@ -33,7 +33,7 @@ repositories {
 }
 
 val accessControlCommonVersion = "1.0.0-SNAPSHOT"
-val arrowVersion = "0.10.4"
+val arrowVersion = "0.10.5"
 val baseCoreVersion = "2.0.0-SNAPSHOT"
 val baseModuleVersion = "2.0.0-SNAPSHOT"
 val jacksonVersion = "2.10.2"
