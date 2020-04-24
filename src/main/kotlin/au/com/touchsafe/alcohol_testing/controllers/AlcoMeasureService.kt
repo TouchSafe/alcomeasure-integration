@@ -35,18 +35,22 @@ open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controll
 	}
 
 	suspend fun io.ktor.websocket.DefaultWebSocketServerSession.connect() {
+		val accessControllerFactory: au.com.touchsafe.access_control_common.models.generated.AccessControllerFactory by com.github.evanbennett.core.ServiceLocator.lazyGet()
+		val accessControllerFactoryVersion: au.com.touchsafe.access_control_common.models.generated.AccessControllerVersionFactory by com.github.evanbennett.core.ServiceLocator.lazyGet()
+		val fileFactory: com.github.evanbennett.module.models.generated.FileFactory by com.github.evanbennett.core.ServiceLocator.lazyGet()
 		var accessControllerId: AccessControllerId? = null
-
 		try {
+			val uniqueIdentifierStart = "${accessControllerFactory.COLUMNS.UNIQUE_IDENTIFIER.COLUMN_NAME}:"
 			for (frame in incoming) {
 				when (frame) {
 					is io.ktor.http.cio.websocket.Frame.Text -> {
 						val message = frame.readText()
 						when {
-							message.startsWith(au.com.touchsafe.access_control_common.models.generated.AccessControllerFactory.UNIQUE_IDENTIFIER_START) -> {
-								val accessControllerFactory: au.com.touchsafe.access_control_common.models.generated.AccessControllerFactory by com.github.evanbennett.core.ServiceLocator.lazyGet()
-								val accessControllerFactoryVersion: au.com.touchsafe.access_control_common.models.generated.AccessControllerVersionFactory by com.github.evanbennett.core.ServiceLocator.lazyGet()
-								accessControllerId = accessControllerFactory.loadAccessControllerId(message, call)
+							message.startsWith(uniqueIdentifierStart) -> {
+								val uniqueIdentifierString = message.substring(uniqueIdentifierStart.length)
+								val uniqueIdentifier = accessControllerFactory.COLUMNS.UNIQUE_IDENTIFIER.DATA_TYPE_SINGLETON(uniqueIdentifierString)
+								val accessController = accessControllerFactory.loadWithUniqueUniqueIdentifier(accessControllerFactory.COLUMNS.UNIQUE_IDENTIFIER.field(uniqueIdentifier), call) ?: throw RuntimeException("Access Controller not found with `uniqueIdentifier`: [$uniqueIdentifierString]")
+								accessControllerId = accessController.accessControllerId.value!!.integer
 								accessControllersConnected[accessControllerId] = this
 								val accessControllerVersion = accessControllerFactoryVersion.loadReferable(accessControllerId, call)
 								val alcoMeasureSerial = accessControllerVersion.alcoMeasureSerial.value?.integer ?: throw RuntimeException("Referable Access Controller Version found with `accessControllerId` but it does not have an `alcoMeasureSerial`: [$accessControllerId]")
@@ -60,7 +64,6 @@ open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controll
 						}
 					}
 					is io.ktor.http.cio.websocket.Frame.Binary -> {
-						val fileFactory: com.github.evanbennett.module.models.generated.FileFactory by com.github.evanbennett.core.ServiceLocator.lazyGet()
 						val fileId = fileFactory.insert(frame.data, call).long
 						send(au.com.touchsafe.access_control_common.AlcoMeasure.FILE_ID_START + fileId)
 					}
