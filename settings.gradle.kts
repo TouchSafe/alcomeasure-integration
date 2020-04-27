@@ -6,4 +6,4 @@ pluginManagement {
 	}
 }
 
-rootProject.name = "alcohol-testing"
+rootProject.name = "alcomeasure-integration"

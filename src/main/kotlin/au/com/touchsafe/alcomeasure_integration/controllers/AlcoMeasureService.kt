@@ -1,4 +1,4 @@
-package au.com.touchsafe.alcohol_testing.controllers
+package au.com.touchsafe.alcomeasure_integration.controllers
 
 import com.github.evanbennett.module.logError
 import io.ktor.http.cio.websocket.readText
@@ -9,7 +9,7 @@ import io.ktor.websocket.webSocket
 typealias AccessControllerId = Int
 typealias PersonId = Int
 
-// TODO: When an Access Controller disconnects/is not connected: Send a notification to TouchSafe; Send a notification/email to Client; regarding alcohol testing not being undertaken.
+// TODO: When an Access Controller disconnects/is not connected: Send a notification to TouchSafe; Send a notification/email to Client; regarding AlcoMeasure Integration not being available.
 @Suppress("MemberVisibilityCanBePrivate")
 open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controller("/services/alcoMeasure/") {
 
@@ -80,7 +80,7 @@ open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controll
 	protected suspend fun storeResult(message: String, _accessControllerId: AccessControllerId, call: io.ktor.application.ApplicationCall): Int {
 		val messageParts = message.split(';')
 		if (messageParts.size != 6) throw RuntimeException("Invalid store result frame: [$message]")
-		val alcoMeasureResultFactory: au.com.touchsafe.alcohol_testing.models.generated.AlcoMeasureResultFactory by com.github.evanbennett.core.ServiceLocator.lazyGet()
+		val alcoMeasureResultFactory: au.com.touchsafe.alcomeasure_integration.models.generated.AlcoMeasureResultFactory by com.github.evanbennett.core.ServiceLocator.lazyGet()
 		val alcoMeasureResultId = alcoMeasureResultFactory.COLUMNS.ALCO_MEASURE_RESULT_ID.field()
 		val accessControllerId = alcoMeasureResultFactory.COLUMNS.ACCESS_CONTROLLER_ID.field(alcoMeasureResultFactory.COLUMNS.ACCESS_CONTROLLER_ID.DATA_TYPE_SINGLETON(_accessControllerId.toString()))
 		val personId = alcoMeasureResultFactory.COLUMNS.PERSON_ID.field(alcoMeasureResultFactory.COLUMNS.PERSON_ID.DATA_TYPE_SINGLETON(messageParts[1]))

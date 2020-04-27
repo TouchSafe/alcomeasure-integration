@@ -19,7 +19,7 @@ plugins {
 
 group = "au.com.touchsafe"
 version = "1.0.0-SNAPSHOT"
-description = "TouchSafe Alcohol Testing Module."
+description = "TouchSafe AlcoMeasure Integration Module."
 
 application {
 	mainClassName = "io.ktor.server.netty.EngineMain"
@@ -37,7 +37,7 @@ val arrowVersion = "0.10.5"
 val baseCoreVersion = "2.0.0-SNAPSHOT"
 val baseModuleVersion = "2.0.0-SNAPSHOT"
 val jacksonVersion = "2.10.2"
-val jasyncSqlVersion = "1.0.7"
+val jasyncSqlVersion = "1.0.15"
 val ktorVersion = "1.3.2"
 val logbackVersion = "1.2.3"
 val nettyTcnativeVersion = "2.0.26.Final"
@@ -71,7 +71,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 }
 
 configure<com.github.evanbennett.gradle.pgmapper.PgmapperPluginExtension> {
-	projectPackage.set("$group.alcohol_testing")
+	projectPackage.set("$group.alcomeasure_integration")
 	sqlReplacements.set(setOf(
 			com.github.evanbennett.gradle.pgmapper.SqlReplacementString("base-module", databaseName.get()),
 			com.github.evanbennett.gradle.pgmapper.SqlReplacementString("ModuleGroup", generatedSqlGroup.get()),
