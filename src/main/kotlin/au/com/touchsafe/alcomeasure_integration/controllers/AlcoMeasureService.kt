@@ -9,7 +9,6 @@ import io.ktor.websocket.webSocket
 typealias AccessControllerId = Int
 typealias PersonId = Int
 
-// TODO: When an Access Controller disconnects/is not connected: Send a notification to TouchSafe; Send a notification/email to Client; regarding AlcoMeasure Integration not being available.
 @Suppress("MemberVisibilityCanBePrivate")
 open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controller("/services/alcoMeasure/") {
 

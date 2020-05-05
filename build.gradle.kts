@@ -81,13 +81,13 @@ configure<com.github.evanbennett.gradle.pgmapper.PgmapperPluginExtension> {
 			com.github.evanbennett.gradle.pgmapper.SqlReplacementString("OrganisationsAndPeopleUser", generatedSqlUser.get()),
 			com.github.evanbennett.gradle.pgmapper.SqlReplacementString("access-control-common", databaseName.get()),
 			com.github.evanbennett.gradle.pgmapper.SqlReplacementString("AccessControlCommonGroup", generatedSqlGroup.get()),
-			com.github.evanbennett.gradle.pgmapper.SqlReplacementString("AccessControlCommonUser", generatedSqlUser.get()),
-			com.github.evanbennett.gradle.pgmapper.SqlReplacementString(" Configuration ", " ${deploymentSchema.get()} ")
+			com.github.evanbennett.gradle.pgmapper.SqlReplacementString("AccessControlCommonUser", generatedSqlUser.get())
 	))
 	parentSqlPackages.addAll(
 			com.github.evanbennett.gradle.pgmapper.ParentSqlPackage("com.github.evanbennett.core", "_core_system_setup.sql"),
 			com.github.evanbennett.gradle.pgmapper.ParentSqlPackage("com.github.evanbennett.module", "module_"),
 			com.github.evanbennett.gradle.pgmapper.ParentSqlPackage("au.com.touchsafe.organisations-and-people", "}organisations_and_people_"),
+			com.github.evanbennett.gradle.pgmapper.ParentSqlPackage("au.com.touchsafe.access_control_common", "access_control_common_"),
 			com.github.evanbennett.gradle.pgmapper.ParentSqlPackage("au.com.touchsafe.access-control-common", "}access_control_common_")
 	)
 }
