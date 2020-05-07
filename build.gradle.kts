@@ -39,7 +39,6 @@ val baseModuleVersion = "2.0.0-SNAPSHOT"
 val jacksonVersion = "2.10.2"
 val jasyncSqlVersion = "1.0.15"
 val ktorVersion = "1.3.2"
-val logbackVersion = "1.2.3"
 val nettyTcnativeVersion = "2.0.26.Final"
 val organisationsAndPeopleVersion = "1.0.0-SNAPSHOT"
 
@@ -57,8 +56,6 @@ dependencies {
 	implementation("io.ktor", "ktor-websockets", ktorVersion)
 	implementation("io.netty", "netty-tcnative", nettyTcnativeVersion, classifier = "windows-x86_64")
 	implementation("io.netty", "netty-tcnative-boringssl-static", nettyTcnativeVersion, classifier = "windows-x86_64")
-
-	runtimeOnly("ch.qos.logback", "logback-classic", logbackVersion)
 
 	"sql"("au.com.touchsafe", "access-control-common", accessControlCommonVersion, classifier = com.github.evanbennett.gradle.sql.SqlPlugin.SQL_STRING, ext = "zip")
 	"sql"("au.com.touchsafe", "organisations-and-people", organisationsAndPeopleVersion, classifier = com.github.evanbennett.gradle.sql.SqlPlugin.SQL_STRING, ext = "zip")
