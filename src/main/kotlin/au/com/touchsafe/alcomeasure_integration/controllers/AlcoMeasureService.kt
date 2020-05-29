@@ -9,7 +9,7 @@ import io.ktor.websocket.webSocket
 typealias AccessControllerId = Int
 typealias PersonId = Int
 
-@Suppress("MemberVisibilityCanBePrivate")
+// TODO: Remove web-socket connection. Replace with IoT Core Command & single HTTP request for results.
 open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controller("/services/alcoMeasure/") {
 
 	override val auditLogLocation = Messages.ALCO_MEASURE_SERVICE
@@ -39,7 +39,7 @@ open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controll
 		val fileFactory: com.github.evanbennett.module.models.generated.FileFactory by com.github.evanbennett.core.ServiceLocator.lazyGet()
 		var accessControllerId: AccessControllerId? = null
 		try {
-			val uniqueIdentifierStart = "${accessControllerFactory.COLUMNS.UNIQUE_IDENTIFIER.COLUMN_NAME}:"
+			val uniqueIdentifierStart = "${accessControllerFactory.COLUMNS.GOOGLE_CLOUD_DEVICE_ID.COLUMN_NAME}:"
 			for (frame in incoming) {
 				when (frame) {
 					is io.ktor.http.cio.websocket.Frame.Text -> {
@@ -47,8 +47,8 @@ open class AlcoMeasureService : com.github.evanbennett.core.controllers.Controll
 						when {
 							message.startsWith(uniqueIdentifierStart) -> {
 								val uniqueIdentifierString = message.substring(uniqueIdentifierStart.length)
-								val uniqueIdentifier = accessControllerFactory.COLUMNS.UNIQUE_IDENTIFIER.DATA_TYPE_SINGLETON(uniqueIdentifierString)
-								val accessController = accessControllerFactory.loadWithUniqueUniqueIdentifier(accessControllerFactory.COLUMNS.UNIQUE_IDENTIFIER.field(uniqueIdentifier), call) ?: throw RuntimeException("Access Controller not found with `uniqueIdentifier`: [$uniqueIdentifierString]")
+								val uniqueIdentifier = accessControllerFactory.COLUMNS.GOOGLE_CLOUD_DEVICE_ID.DATA_TYPE_SINGLETON(uniqueIdentifierString)
+								val accessController = accessControllerFactory.loadWithUniqueGoogleCloudDevice(accessControllerFactory.COLUMNS.GOOGLE_CLOUD_DEVICE_ID.field(uniqueIdentifier), call) ?: throw RuntimeException("Access Controller not found with `uniqueIdentifier`: [$uniqueIdentifierString]")
 								accessControllerId = accessController.accessControllerId.value!!.integer
 								accessControllersConnected[accessControllerId] = this
 								val accessControllerVersion = accessControllerFactoryVersion.loadReferable(accessControllerId, call)
