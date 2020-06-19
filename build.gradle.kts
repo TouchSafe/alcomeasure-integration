@@ -29,6 +29,7 @@ repositories {
 	jcenter()
 	mavenCentral()
 	mavenLocal()
+	maven { url = uri("https://jitpack.io") }
 	maven { url = uri("https://kotlin.bintray.com/ktor") }
 }
 
@@ -84,8 +85,8 @@ configure<com.github.evanbennett.gradle.pgmapper.PgmapperPluginExtension> {
 			com.github.evanbennett.gradle.pgmapper.ParentSqlPackage("com.github.evanbennett.core", "_core_system_setup.sql"),
 			com.github.evanbennett.gradle.pgmapper.ParentSqlPackage("com.github.evanbennett.module", "module_"),
 			com.github.evanbennett.gradle.pgmapper.ParentSqlPackage("au.com.touchsafe.organisations-and-people", "}organisations_and_people_"),
-			com.github.evanbennett.gradle.pgmapper.ParentSqlPackage("au.com.touchsafe.access_control_common", "access_control_configuration_"),
-			com.github.evanbennett.gradle.pgmapper.ParentSqlPackage("au.com.touchsafe.access-control-common", "}access_control_configuration_")
+			com.github.evanbennett.gradle.pgmapper.ParentSqlPackage("au.com.touchsafe.access_control_common", "access_control_common_"),
+			com.github.evanbennett.gradle.pgmapper.ParentSqlPackage("au.com.touchsafe.access-control-common", "}}access_control_common_")
 	)
 }
 
