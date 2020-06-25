@@ -7,7 +7,7 @@ open class AlcoMeasureResultReport : au.com.touchsafe.alcomeasure_integration.co
 	override val displayResultPanelHeight = 0
 	override val displayResultPanelWidth = 0
 
-	// TODO: Implement a view mode that displays the photos!!!
+	// FIXME: Implement a view mode that displays the photos!!!
 
 	open class ReverseRoutes(controller: AlcoMeasureResultReport) : au.com.touchsafe.alcomeasure_integration.controllers.generated.managed.AlcoMeasureResultReport.ReverseRoutes(controller)
 }

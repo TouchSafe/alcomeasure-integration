@@ -93,9 +93,3 @@ configure<com.github.evanbennett.gradle.pgmapper.PgmapperPluginExtension> {
 tasks.withType<com.github.evanbennett.gradle.i18n.CheckForDuplicateKeysAcrossFamiliesTask> {
 	ignoreMessages.set(setOf(com.github.evanbennett.gradle.i18n.I18nPlugin.IgnoreMessages("""au\.com\.touchsafe\.$name\.PermissionsValues""", "")))
 }
-
-val generateJks = task("generateJks", JavaExec::class) {
-	classpath = sourceSets["main"].runtimeClasspath
-	main = "com.github.evanbennett.module.CertificateGenerator"
-}
-getTasksByName("run", false).first().dependsOn(generateJks)

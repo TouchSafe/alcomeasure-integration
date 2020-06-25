@@ -9,8 +9,5 @@ fun io.ktor.application.Application.main() {
 	au.com.touchsafe.access_control_common.components.AccessControlCommon.bindings()
 	au.com.touchsafe.organisations_and_people.components.OrganisationsAndPeople.bindings()
 	au.com.touchsafe.alcomeasure_integration.components.AlcomeasureIntegration.bindings()
-	install(io.ktor.websocket.WebSockets) {
-		pingPeriodMillis = 60 * 1000
-	}
 	module(au.com.touchsafe.alcomeasure_integration.components.AlcomeasureIntegration::menu)
 }
